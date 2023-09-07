@@ -1,0 +1,72 @@
+2023.09.07 17:11:24 INFO  Started: Metals version 1.0.1+22-acf9aec2-SNAPSHOT in folders 'M:\Web Projects\shorty-project\shorty-backend' for client Visual Studio Code - Insiders 1.82.0-insider.
+Sep 07, 2023 5:11:24 PM org.flywaydb.core.internal.license.VersionPrinter printVersionOnly
+INFO: Flyway Community Edition 9.22.0 by Redgate
+Sep 07, 2023 5:11:24 PM org.flywaydb.core.internal.license.VersionPrinter printVersion
+INFO: See release notes here: https://rd.gt/416ObMi
+Sep 07, 2023 5:11:24 PM org.flywaydb.core.internal.license.VersionPrinter printVersion
+INFO: 
+Sep 07, 2023 5:11:24 PM org.flywaydb.core.FlywayExecutor execute
+INFO: Database: jdbc:h2:file:M:\Web Projects\shorty-project\shorty-backend\.metals\metals (H2 2.1)
+Sep 07, 2023 5:11:24 PM org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory allAppliedMigrations
+INFO: Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+Sep 07, 2023 5:11:24 PM org.flywaydb.core.internal.command.DbValidate validate
+INFO: Successfully validated 4 migrations (execution time 00:00.026s)
+Sep 07, 2023 5:11:24 PM org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory create
+INFO: Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+Sep 07, 2023 5:11:24 PM org.flywaydb.core.internal.command.DbMigrate migrateGroup
+INFO: Current version of schema "PUBLIC": << Empty Schema >>
+Sep 07, 2023 5:11:24 PM org.flywaydb.core.internal.command.DbMigrate doMigrateGroup
+INFO: Migrating schema "PUBLIC" to version "1 - Create tables"
+Sep 07, 2023 5:11:24 PM org.flywaydb.core.internal.command.DbMigrate doMigrateGroup
+INFO: Migrating schema "PUBLIC" to version "2 - Server discovery"
+Sep 07, 2023 5:11:24 PM org.flywaydb.core.internal.command.DbMigrate doMigrateGroup
+INFO: Migrating schema "PUBLIC" to version "3 - Jar symbols"
+Sep 07, 2023 5:11:24 PM org.flywaydb.core.internal.command.DbMigrate doMigrateGroup
+INFO: Migrating schema "PUBLIC" to version "4 - Fingerprints"
+Sep 07, 2023 5:11:24 PM org.flywaydb.core.internal.command.DbMigrate logSummary
+INFO: Successfully applied 4 migrations to schema "PUBLIC", now at version v4 (execution time 00:00.028s)
+2023.09.07 17:11:24 INFO  time: initialize in 0.66s
+2023.09.07 17:11:27 WARN  Build server is not auto-connectable.
+2023.09.07 17:11:27 WARN  no build target for: M:\Web Projects\shorty-project\shorty-backend\app\controllers\HomeController.scala
+2023.09.07 17:11:31 INFO  no build target found for M:\Web Projects\shorty-project\shorty-backend\app\controllers\HomeController.scala. Using presentation compiler with project's scala-library version: 3.3.1
+2023.09.07 17:11:33 INFO  time: code lens generation in 6.55s
+2023.09.07 17:13:41 WARN  no build target for: M:\Web Projects\shorty-project\shorty-backend\build.sbt
+2023.09.07 17:13:53 WARN  no build target for: M:\Web Projects\shorty-project\shorty-backend\build.sbt
+2023.09.07 17:13:57 WARN  no build target for: M:\Web Projects\shorty-project\shorty-backend\build.sbt
+2023.09.07 17:17:59 WARN  no build target for: M:\Web Projects\shorty-project\shorty-backend\app\controllers\UrlController.scala
+2023.09.07 17:18:08 WARN  no build target for: M:\Web Projects\shorty-project\shorty-backend\app\controllers\UrlController.scala
+2023.09.07 17:18:41 WARN  no build target for: M:\Web Projects\shorty-project\shorty-backend\app\controllers\UrlController.scala
+Sep 07, 2023 5:21:07 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTrace
+Sep 07, 2023 5:22:41 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTrace
+Sep 07, 2023 5:23:24 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTrace
+2023.09.07 17:31:55 WARN  no build target for: M:\Web Projects\shorty-project\shorty-backend\app\controllers\UrlController.scala
+2023.09.07 17:45:01 INFO  Started: Metals version 1.0.1+22-acf9aec2-SNAPSHOT in folders 'M:\Web Projects\shorty-project\shorty-backend' for client Visual Studio Code - Insiders 1.82.0-insider.
+Sep 07, 2023 5:45:01 PM org.flywaydb.core.internal.license.VersionPrinter printVersionOnly
+INFO: Flyway Community Edition 9.22.0 by Redgate
+Sep 07, 2023 5:45:01 PM org.flywaydb.core.internal.license.VersionPrinter printVersion
+INFO: See release notes here: https://rd.gt/416ObMi
+Sep 07, 2023 5:45:01 PM org.flywaydb.core.internal.license.VersionPrinter printVersion
+INFO: 
+Sep 07, 2023 5:45:02 PM org.flywaydb.core.FlywayExecutor execute
+INFO: Database: jdbc:h2:file:M:\Web Projects\shorty-project\shorty-backend\.metals\metals (H2 2.1)
+Sep 07, 2023 5:45:02 PM org.flywaydb.core.internal.command.DbValidate validate
+INFO: Successfully validated 4 migrations (execution time 00:00.023s)
+Sep 07, 2023 5:45:02 PM org.flywaydb.core.internal.command.DbMigrate migrateGroup
+INFO: Current version of schema "PUBLIC": 4
+Sep 07, 2023 5:45:02 PM org.flywaydb.core.internal.command.DbMigrate logSummary
+INFO: Schema "PUBLIC" is up to date. No migration necessary.
+2023.09.07 17:45:02 INFO  time: initialize in 0.58s
+Sep 07, 2023 5:45:45 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTrace
+Sep 07, 2023 5:45:45 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTrace
+Sep 07, 2023 5:48:05 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTrace
+Sep 07, 2023 5:49:18 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTrace
+2023.09.07 17:51:14 INFO  Shutting down server
+2023.09.07 17:51:14 INFO  shutting down Metals
+2023.09.07 17:51:14 INFO  Exiting server

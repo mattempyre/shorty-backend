@@ -1,49 +1,43 @@
 package controllers
 
-import play.api.mvc._
 import javax.inject._
-import com.redis._
+import play.api.mvc._
+import connectors.RedisConnector
+import scala.concurrent.{ExecutionContext, Future}
+import play.api.libs.json.Json
 
-@Singleton
-class UrlController @Inject() (val controllerComponents: ControllerComponents)
+class UrlController @Inject() (
+    val controllerComponents: ControllerComponents,
+    redisConnector: RedisConnector
+)(implicit ec: ExecutionContext)
     extends BaseController {
 
-  // Initializing Redis client
-  val redis = new RedisClient("localhost", 6379)
-
-  def create = Action { implicit request: Request[AnyContent] =>
-    request.body.asText
-      .map { longUrl =>
-        val shortCode =
-          longUrl.hashCode.toString // Simple hash for the sake of this example
-        redis.set(shortCode, longUrl) match {
-          case true  => Ok(shortCode)
-          case false => InternalServerError("Failed to create short URL")
+  def create: Action[AnyContent] = Action.async { implicit request =>
+    request.body.asText match {
+      case Some(longUrl) =>
+        val shortCode = Math.abs(longUrl.hashCode).toString
+        redisConnector.client.set(shortCode, longUrl).map { _ =>
+          Ok(Json.obj("shortCode" -> shortCode))
         }
-      }
-      .getOrElse {
-        BadRequest("Expected text data")
-      }
+      case None => Future.successful(BadRequest("Invalid URL"))
+    }
   }
 
-  def redirect(shortcode: String) = Action {
-    redis.get(shortcode) match {
-      case Some(url) => Redirect(url, MOVED_PERMANENTLY)
+  def redirect(shortcode: String): Action[AnyContent] = Action.async {
+    redisConnector.client.get[String](shortcode).map {
+      case Some(url) => Redirect(url)
       case None      => NotFound("URL not found")
     }
   }
 
-  def update(shortcode: String) = Action {
-    implicit request: Request[AnyContent] =>
-      request.body.asText
-        .map { newUrl =>
-          redis.set(shortcode, newUrl) match {
-            case true  => Ok("URL updated")
-            case false => InternalServerError("Failed to update URL")
+  def update(shortcode: String): Action[AnyContent] = Action.async {
+    implicit request =>
+      request.body.asText match {
+        case Some(newUrl) =>
+          redisConnector.client.set(shortcode, newUrl).map { _ =>
+            Ok("URL updated successfully")
           }
-        }
-        .getOrElse {
-          BadRequest("Expected text data")
-        }
+        case None => Future.successful(BadRequest("Invalid URL"))
+      }
   }
 }

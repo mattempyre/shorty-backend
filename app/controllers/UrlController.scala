@@ -46,14 +46,7 @@ class UrlController @Inject() (
             s"http://$url"
           } else url
 
-        // Check if the URL starts with "http://www." or "https://www." and remove "www." if present
-        val finalUrl =
-          if (transformedUrl.startsWith("http://www.")) transformedUrl.drop(11)
-          else if (transformedUrl.startsWith("https://www."))
-            transformedUrl.drop(12)
-          else transformedUrl
-
-        Redirect(finalUrl)
+        Redirect(transformedUrl)
       case None =>
         NotFound("URL not found")
     }
@@ -67,6 +60,18 @@ class UrlController @Inject() (
             Ok("URL updated successfully")
           }
         case _ => Future.successful(BadRequest("Invalid URL"))
+      }
+  }
+
+  def delete(shortcode: String): Action[AnyContent] = Action.async {
+    implicit request =>
+      // Implement the logic to delete the URL associated with the given shortcode
+      redisConnector.client.del(shortcode).map { deletedCount =>
+        if (deletedCount > 0) {
+          Ok("URL deleted successfully")
+        } else {
+          NotFound("URL not found")
+        }
       }
   }
 }

@@ -8,28 +8,36 @@ import play.api.libs.json.Json
 import org.apache.commons.codec.digest.DigestUtils
 import scala.util.matching.Regex
 
+// Inject the required dependencies and set up the controller
 class UrlController @Inject() (
     val controllerComponents: ControllerComponents,
     redisConnector: RedisConnector
 )(implicit ec: ExecutionContext)
     extends BaseController {
 
+  // Regular expression to validate URLs
   private val urlPattern: Regex =
     "^(https?://)?[a-zA-Z0-9.-]+(\\.[a-zA-Z]{2,4})(:[0-9]+)?(/.*)?$".r
 
+  // Function to check if a URL is valid
   private def isValidUrl(url: String): Boolean = {
     urlPattern.pattern.matcher(url).matches()
   }
 
+  // Function to generate a short code from a long URL using SHA-256
   private def generateShortCode(longUrl: String): String = {
     val sha256Hash = DigestUtils.sha256Hex(longUrl)
     sha256Hash.substring(0, 6)
   }
 
+  // Action to create a short URL from a long URL
   def create: Action[AnyContent] = Action.async { implicit request =>
     request.body.asText match {
       case Some(longUrl) if isValidUrl(longUrl) =>
+        // Generate a short code for the long URL
         val shortCode = generateShortCode(longUrl)
+
+        // Store the short code and long URL in Redis
         redisConnector.client.set(shortCode, longUrl).map { _ =>
           Ok(Json.obj("shortCode" -> shortCode))
         }
@@ -37,6 +45,7 @@ class UrlController @Inject() (
     }
   }
 
+  // Action to redirect to the original URL using a short code
   def redirect(shortcode: String): Action[AnyContent] = Action.async {
     redisConnector.client.get[String](shortcode).map {
       case Some(url) =>
@@ -46,16 +55,19 @@ class UrlController @Inject() (
             s"http://$url"
           } else url
 
+        // Redirect to the final URL
         Redirect(transformedUrl)
       case None =>
         NotFound("URL not found")
     }
   }
 
+  // Action to update the original URL associated with a short code
   def update(shortcode: String): Action[AnyContent] = Action.async {
     implicit request =>
       request.body.asText match {
         case Some(newUrl) if isValidUrl(newUrl) =>
+          // Update the long URL associated with the short code in Redis
           redisConnector.client.set(shortcode, newUrl).map { _ =>
             Ok("URL updated successfully")
           }
@@ -63,15 +75,13 @@ class UrlController @Inject() (
       }
   }
 
+  // Action to delete the URL associated with a short code
   def delete(shortcode: String): Action[AnyContent] = Action.async {
     implicit request =>
       // Implement the logic to delete the URL associated with the given shortcode
-      redisConnector.client.del(shortcode).map { deletedCount =>
-        if (deletedCount > 0) {
-          Ok("URL deleted successfully")
-        } else {
-          NotFound("URL not found")
-        }
+      redisConnector.client.del(shortcode).map {
+        case true  => Ok("URL deleted successfully")
+        case false => NotFound("URL not found")
       }
   }
 }

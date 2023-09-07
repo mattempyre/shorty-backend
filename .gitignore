@@ -61,3 +61,7 @@ bin/
 .vscode
 .env
 
+.metals/metals.log
+.metals/metals.lock.db
+
+conf/application.conf

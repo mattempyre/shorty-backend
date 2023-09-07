@@ -5,7 +5,8 @@ import play.api.mvc._
 import connectors.RedisConnector
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.libs.json.Json
-import java.security.MessageDigest
+import org.apache.commons.codec.digest.DigestUtils
+import scala.util.matching.Regex
 
 class UrlController @Inject() (
     val controllerComponents: ControllerComponents,
@@ -13,40 +14,59 @@ class UrlController @Inject() (
 )(implicit ec: ExecutionContext)
     extends BaseController {
 
-  // Function to generate a short code from a long URL using SHA-256
+  private val urlPattern: Regex =
+    "^(https?://)?[a-zA-Z0-9.-]+(\\.[a-zA-Z]{2,4})(:[0-9]+)?(/.*)?$".r
+
+  private def isValidUrl(url: String): Boolean = {
+    urlPattern.pattern.matcher(url).matches()
+  }
+
   private def generateShortCode(longUrl: String): String = {
-    val sha256Digest = MessageDigest.getInstance("SHA-256")
-    val hashBytes = sha256Digest.digest(longUrl.getBytes("UTF-8"))
-    val hexString = hashBytes.map("%02x".format(_)).mkString
-    hexString.substring(0, 6) // Limit to 6 characters
+    val sha256Hash = DigestUtils.sha256Hex(longUrl)
+    sha256Hash.substring(0, 6)
   }
 
   def create: Action[AnyContent] = Action.async { implicit request =>
     request.body.asText match {
-      case Some(longUrl) =>
+      case Some(longUrl) if isValidUrl(longUrl) =>
         val shortCode = generateShortCode(longUrl)
         redisConnector.client.set(shortCode, longUrl).map { _ =>
           Ok(Json.obj("shortCode" -> shortCode))
         }
-      case None => Future.successful(BadRequest("Invalid URL"))
+      case _ => Future.successful(BadRequest("Invalid URL"))
     }
   }
 
   def redirect(shortcode: String): Action[AnyContent] = Action.async {
     redisConnector.client.get[String](shortcode).map {
-      case Some(url) => Redirect(url)
-      case None      => NotFound("URL not found")
+      case Some(url) =>
+        // Check if the URL starts with "http://" or "https://", and add "http://" if not
+        val transformedUrl =
+          if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            s"http://$url"
+          } else url
+
+        // Check if the URL starts with "http://www." or "https://www." and remove "www." if present
+        val finalUrl =
+          if (transformedUrl.startsWith("http://www.")) transformedUrl.drop(11)
+          else if (transformedUrl.startsWith("https://www."))
+            transformedUrl.drop(12)
+          else transformedUrl
+
+        Redirect(finalUrl)
+      case None =>
+        NotFound("URL not found")
     }
   }
 
   def update(shortcode: String): Action[AnyContent] = Action.async {
     implicit request =>
       request.body.asText match {
-        case Some(newUrl) =>
+        case Some(newUrl) if isValidUrl(newUrl) =>
           redisConnector.client.set(shortcode, newUrl).map { _ =>
             Ok("URL updated successfully")
           }
-        case None => Future.successful(BadRequest("Invalid URL"))
+        case _ => Future.successful(BadRequest("Invalid URL"))
       }
   }
 }

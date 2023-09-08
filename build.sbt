@@ -8,6 +8,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 scalaVersion := "2.13.12"
 
 libraryDependencies ++= Seq(
+  filters,
   guice,
   "com.google.inject" % "guice" % "5.1.0",
   "com.google.inject.extensions" % "guice-assistedinject" % "5.1.0",

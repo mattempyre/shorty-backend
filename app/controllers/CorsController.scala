@@ -9,8 +9,14 @@ class CorsController @Inject() (cc: ControllerComponents)
     Ok.withHeaders(
       "Access-Control-Allow-Origin" -> "*",
       "Access-Control-Allow-Methods" -> "OPTIONS, POST, GET, PUT, DELETE",
-      "Access-Control-Allow-Headers" -> "Content-Type, Authorization",
+      "Access-Control-Allow-Headers" -> "*",
       "Access-Control-Max-Age" -> "3600"
     )
+  }
+
+  // Add a method to handle your API endpoint without authentication here
+  def yourApiEndpoint = Action {
+    // Your API logic here
+    Ok("Response without authentication")
   }
 }

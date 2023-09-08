@@ -1,3 +1,5 @@
+GET     /api/csrf-token         controllers.CsrfTokenController.csrfToken
+
 # Routes
 # This file defines all application routes (Higher priority routes first)
 # https://www.playframework.com/documentation/latest/ScalaRouting
@@ -13,3 +15,4 @@ POST    /api/create         controllers.UrlController.create
 GET     /:shortcode     controllers.UrlController.redirect(shortcode: String)
 PUT     /api/update/:shortcode controllers.UrlController.update(shortcode: String)
 DELETE  /api/delete/:shortcode       controllers.UrlController.delete(shortcode: String)
+

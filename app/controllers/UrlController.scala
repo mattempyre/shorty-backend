@@ -80,8 +80,8 @@ class UrlController @Inject() (
     implicit request =>
       // Implement the logic to delete the URL associated with the given shortcode
       redisConnector.client.del(shortcode).map {
-        case true  => Ok("URL deleted successfully")
-        case false => NotFound("URL not found")
+        case 1L => Ok("URL deleted successfully")
+        case 0L => NotFound("URL not found")
       }
   }
 }

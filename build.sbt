@@ -17,3 +17,6 @@ libraryDependencies ++= Seq(
   "com.github.etaty" %% "rediscala" % "1.9.0",
   "commons-codec" % "commons-codec" % "1.15"
 )
+
+// resolvers += Resolver.sonatypeRepo("releases")
+// resolvers += Resolver.sonatypeRepo("snapshots")
